@@ -93,8 +93,8 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .ddp.sel{background:var(--orange);border-color:var(--orange);color:#fff;}
 .ddp.lit{border-color:var(--orange-dim);color:var(--text);}
 .dial-row{display:flex;align-items:center;gap:16px;}
-.dial-wrap{position:relative;width:136px;height:136px;flex-shrink:0;}
-.dial-wrap svg{width:136px;height:136px;transform:rotate(-90deg);}
+.dial-wrap{position:relative;width:168px;height:168px;flex-shrink:0;}
+.dial-wrap svg{width:168px;height:168px;transform:rotate(-90deg);}
 .d-bg{fill:none;stroke:#222;stroke-width:7;}
 .d-arc{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dasharray .6s,stroke-dashoffset .6s;}
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
@@ -291,15 +291,15 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
         <div class="dial-day-pills" id="ddpills"></div>
         <div class="dial-row">
           <div class="dial-wrap">
-            <svg viewBox="0 0 136 136">
-              <circle class="d-bg" cx="68" cy="68" r="20"/>
-              <circle class="d-arc" id="arc-m" cx="68" cy="68" r="20" stroke="#f0f0f0"/>
-              <circle class="d-bg" cx="68" cy="68" r="33"/>
-              <circle class="d-arc" id="arc-s" cx="68" cy="68" r="33" stroke="#E8692A"/>
-              <circle class="d-bg" cx="68" cy="68" r="46"/>
-              <circle class="d-arc" id="arc-h" cx="68" cy="68" r="46" stroke="#378ADD"/>
-              <circle class="d-bg" cx="68" cy="68" r="59"/>
-              <circle class="d-arc" id="arc-str" cx="68" cy="68" r="59" stroke="#9b6fd4"/>
+            <svg viewBox="0 0 168 168">
+              <circle class="d-bg" cx="84" cy="84" r="28"/>
+              <circle class="d-arc" id="arc-m" cx="84" cy="84" r="28" stroke="#f0f0f0"/>
+              <circle class="d-bg" cx="84" cy="84" r="41"/>
+              <circle class="d-arc" id="arc-s" cx="84" cy="84" r="41" stroke="#E8692A"/>
+              <circle class="d-bg" cx="84" cy="84" r="54"/>
+              <circle class="d-arc" id="arc-h" cx="84" cy="84" r="54" stroke="#378ADD"/>
+              <circle class="d-bg" cx="84" cy="84" r="67"/>
+              <circle class="d-arc" id="arc-str" cx="84" cy="84" r="67" stroke="#9b6fd4"/>
             </svg>
             <div class="dial-center">
               <div class="dc-pct" id="dc-pct">0%</div>
@@ -807,7 +807,7 @@ function getCS(dk){
 }
 function rdial(){
   var day=DAYS[dday],cs=getCS(day.key),ks=['m','s','h','str'];
-  var radii={m:20,s:33,h:46,str:59};
+  var radii={m:28,s:41,h:54,str:67};
   var td=0,ta=0;ks.forEach(function(k){td+=cs[k].d;ta+=cs[k].t;});
   document.getElementById('dc-pct').textContent=ta>0?Math.round(td/ta*100)+'%':'0%';
   document.getElementById('dc-lbl').textContent=day.lb.toLowerCase();
