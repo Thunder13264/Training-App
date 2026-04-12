@@ -886,7 +886,7 @@ function renderDrillPage(){
       h+='<div class="binfo"><div class="btitle">'+(b.nm||b.name)+'</div><div class="bsub">'+dn+'/'+b.drills.length+' complete</div></div>';
       h+='<div class="bprog"><div class="bbar"><div class="bbar-f" style="width:'+pct+'%;background:'+cc+'"></div></div><span class="bpct">'+pct+'%</span></div>';
       h+='<button class="btoggle"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>';
-      h+='</div><div class="dlist" style="display:none" id="dl-'+src+'-'+bi+'">';
+      h+='</div><div class="dlist" id="dl-'+src+'-'+bi+'">';
       b.drills.forEach(function(d,di){
         var dl=getDL(day.key,src,bi,di);
         var m=dl.makes||0,a=dl.attempts||0,p2=a>0?Math.round(m/a*100):0;
@@ -968,8 +968,8 @@ function mdrll(dk,src,bi,di,done){
   var btn=document.getElementById('deb-'+src+'-'+bi+'-'+di);
   if(panel)panel.classList.remove('on');if(btn)btn.classList.remove('open');openP=null;
   renderDrillPage();
-  var bw=document.getElementById('bw-'+src+'-'+bi),dl2=document.getElementById('dl-'+src+'-'+bi);
-  if(bw&&dl2){bw.classList.add('open');dl2.style.display='block';}
+  var bw=document.getElementById('bw-'+src+'-'+bi);
+  if(bw){bw.classList.add('open');}
   refreshHome();
 }
 
