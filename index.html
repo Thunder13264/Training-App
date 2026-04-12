@@ -23,7 +23,8 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 
 /* ── PAGES ── */
 .pg{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:var(--tabh);}
-.pg.on{display:flex;}
+.pg.on{display:flex;animation:pgIn .28s cubic-bezier(.4,0,.2,1) both;}
+@keyframes pgIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
 .scroll{flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;}
 .scroll::-webkit-scrollbar{display:none;}
 
@@ -144,7 +145,8 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .btoggle{width:24px;height:24px;border-radius:50%;border:1px solid var(--bg3);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .btoggle svg{width:10px;height:10px;fill:none;stroke:var(--text2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
 .bwrap.open .btoggle svg{transform:rotate(90deg);}
-.dlist{border-top:1px solid #1e1e1e;}
+.dlist{border-top:1px solid #1e1e1e;max-height:0;overflow:hidden;opacity:0;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .25s cubic-bezier(.4,0,.2,1);}
+.bwrap.open .dlist{max-height:900px;opacity:1;}
 .drow{border-bottom:1px solid #1e1e1e;}
 .drow:last-child{border-bottom:none;}
 .dsumm{padding:10px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;}
@@ -161,8 +163,8 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .dexp svg{width:10px;height:10px;fill:none;stroke:var(--text2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
 .dexp.open{background:var(--orange);border-color:var(--orange);}
 .dexp.open svg{stroke:#fff;transform:rotate(90deg);}
-.dpanel{display:none;padding:0 14px 12px;background:#080808;}
-.dpanel.on{display:block;}
+.dpanel{max-height:0;overflow:hidden;opacity:0;padding:0 14px;background:#080808;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .2s,padding .3s;}
+.dpanel.on{max-height:500px;opacity:1;padding:0 14px 12px;}
 .pin{padding-top:10px;}
 .cue-box{background:var(--bg2);border-left:2px solid var(--orange);border-radius:0 8px 8px 0;padding:8px 10px;margin-bottom:10px;}
 .cue-text{font-size:11px;color:var(--text2);line-height:1.5;font-style:italic;}
@@ -234,9 +236,10 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .export-btn svg{width:14px;height:14px;fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 
 /* overlays */
-.ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:60;align-items:flex-end;}
-.ov.on{display:flex;}
-.osheet{background:var(--bg2);border-radius:22px 22px 0 0;padding:10px 20px 36px;width:100%;border-top:1px solid var(--bg3);max-height:90%;overflow-y:auto;}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s cubic-bezier(.4,0,.2,1);}
+.ov.on{opacity:1;pointer-events:auto;}
+.osheet{background:var(--bg2);border-radius:22px 22px 0 0;padding:10px 20px 36px;width:100%;border-top:1px solid var(--bg3);max-height:90%;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.ov.on .osheet{transform:translateY(0);}
 .osheet::-webkit-scrollbar{display:none;}
 .ohandle{width:30px;height:3px;background:var(--bg4);border-radius:2px;margin:0 auto 16px;}
 .ohdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
@@ -930,10 +933,9 @@ function renderDrillPage(){
   document.getElementById('scroll-drill').innerHTML=h;
 }
 function tblk(src,bi){
-  var wrap=document.getElementById('bw-'+src+'-'+bi),list=document.getElementById('dl-'+src+'-'+bi),isOpen=wrap.classList.contains('open');
+  var wrap=document.getElementById('bw-'+src+'-'+bi),isOpen=wrap.classList.contains('open');
   document.querySelectorAll('.bwrap').forEach(function(w){w.classList.remove('open');});
-  document.querySelectorAll('.dlist').forEach(function(l){l.style.display='none';});
-  if(!isOpen){wrap.classList.add('open');list.style.display='block';}
+  if(!isOpen){wrap.classList.add('open');}
 }
 function tpanel(dk,src,bi,di){
   var pid='dp-'+src+'-'+bi+'-'+di,bid='deb-'+src+'-'+bi+'-'+di;
