@@ -96,7 +96,7 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .dial-wrap{position:relative;width:160px;height:160px;flex-shrink:0;}
 .dial-wrap svg{width:160px;height:160px;transform:rotate(-90deg);}
 .d-bg{fill:none;stroke:#222;stroke-width:7;}
-.d-arc{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dasharray .6s,stroke-dashoffset .6s;}
+.d-arc{fill:none;stroke-width:7;stroke-linecap:butt;transition:stroke-dasharray .6s,stroke-dashoffset .6s,opacity .3s;}
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
 .dc-pct{font-size:20px;font-weight:700;color:var(--text);line-height:1;}
 .dc-lbl{font-size:9px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.4px;}
@@ -238,9 +238,9 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .export-btn svg{width:14px;height:14px;fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 
 /* overlays */
-.ov{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s cubic-bezier(.4,0,.2,1);}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s cubic-bezier(.4,0,.2,1);}
 .ov.on{opacity:1;pointer-events:auto;}
-.osheet{background:var(--bg2);border-radius:22px 22px 0 0;padding:10px 20px 36px;width:100%;border-top:1px solid var(--bg3);max-height:90%;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.osheet{background:var(--bg2);border-radius:22px 22px 0 0;padding:10px 20px 36px;width:100%;border-top:1px solid var(--bg3);max-height:90%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
 .ov.on .osheet{transform:translateY(0);}
 .osheet::-webkit-scrollbar{display:none;}
 .ohandle{width:30px;height:3px;background:var(--bg4);border-radius:2px;margin:0 auto 16px;}
@@ -380,13 +380,13 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
           <div class="dial-wrap">
             <svg viewBox="0 0 160 160">
               <circle class="d-bg" cx="80" cy="80" r="32"/>
-              <circle class="d-arc" id="arc-m" cx="80" cy="80" r="32" stroke="#f0f0f0"/>
+              <circle class="d-arc" id="arc-m" cx="80" cy="80" r="32" stroke="#f0f0f0" stroke-dasharray="0 1000"/>
               <circle class="d-bg" cx="80" cy="80" r="45"/>
-              <circle class="d-arc" id="arc-s" cx="80" cy="80" r="45" stroke="#E8692A"/>
+              <circle class="d-arc" id="arc-s" cx="80" cy="80" r="45" stroke="#E8692A" stroke-dasharray="0 1000"/>
               <circle class="d-bg" cx="80" cy="80" r="58"/>
-              <circle class="d-arc" id="arc-h" cx="80" cy="80" r="58" stroke="#378ADD"/>
+              <circle class="d-arc" id="arc-h" cx="80" cy="80" r="58" stroke="#378ADD" stroke-dasharray="0 1000"/>
               <circle class="d-bg" cx="80" cy="80" r="71"/>
-              <circle class="d-arc" id="arc-str" cx="80" cy="80" r="71" stroke="#9b6fd4"/>
+              <circle class="d-arc" id="arc-str" cx="80" cy="80" r="71" stroke="#9b6fd4" stroke-dasharray="0 1000"/>
             </svg>
             <div class="dial-center">
               <div class="dc-pct" id="dc-pct">0%</div>
@@ -937,7 +937,7 @@ function getAvailableWeeks(){
   });
   return Object.keys(weeks).sort().reverse();
 }
-function openWeekPicker(){renderWeekPicker();document.getElementById('ov-wkpick').classList.add('on');}
+function openWeekPicker(){renderWeekPicker();var el=document.getElementById('ov-wkpick');el.getBoundingClientRect();el.classList.add('on');}
 function closeWeekPicker(){document.getElementById('ov-wkpick').classList.remove('on');}
 function renderWeekPicker(){
   var curWk=wkId(),weeks=getAvailableWeeks(),html='';
@@ -1110,7 +1110,7 @@ function rdial(){
     var c=cs[k],r=radii[k],circ=2*Math.PI*r,pct=c.t>0?c.d/c.t:0,al=circ*pct;
     var arcId='arc-'+(k==='str'?'str':k);
     var arc=document.getElementById(arcId);
-    if(arc){arc.style.strokeDasharray=al+' '+(circ-al);arc.style.strokeDashoffset='0';}
+    if(arc){arc.style.strokeDasharray=al+' '+(circ-al);arc.style.strokeDashoffset='0';arc.style.opacity=pct>0?'1':'0';}
   });
   var sh='';
   ks.forEach(function(k){
@@ -1532,7 +1532,7 @@ function openZone(zone){
   var p=d.attempts>0?Math.round(d.makes/d.attempts*100):0;
   document.getElementById('zone-pfill').style.width=p+'%';
   document.getElementById('zone-pnum').textContent=d.attempts>0?p+'%':'—';
-  document.getElementById('ov-zone').classList.add('on');
+  var ovz=document.getElementById('ov-zone');ovz.getBoundingClientRect();ovz.classList.add('on');
 }
 function closeZone(){document.getElementById('ov-zone').classList.remove('on');activeZone=null;}
 function adjZone(field,delta){
@@ -1596,7 +1596,7 @@ function showRPEModal(){
     h+='<button class="rpebtn'+(curRPE===i?' sel':'')+'" style="background:'+bg+';color:'+tc+'" onclick="saveRPE('+i+')">'+i+'</button>';
   }
   document.getElementById('rpe-grid').innerHTML=h;
-  document.getElementById('ov-rpe').classList.add('on');
+  var ovr=document.getElementById('ov-rpe');ovr.getBoundingClientRect();ovr.classList.add('on');
 }
 function saveRPE(val){
   if(!rpeDay)return;
