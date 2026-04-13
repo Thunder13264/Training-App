@@ -173,6 +173,8 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .cctl{display:flex;align-items:center;gap:9px;flex:1;}
 .cadj{width:30px;height:30px;border-radius:50%;border:1px solid var(--bg4);background:var(--bg2);font-size:17px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;font-family:inherit;}
 .cval{font-size:20px;font-weight:700;min-width:32px;text-align:center;color:var(--text);}
+.cval-input{font-size:20px;font-weight:700;width:56px;text-align:center;color:var(--text);background:var(--bg2);border:1px solid var(--bg4);border-radius:6px;padding:2px 4px;-moz-appearance:textfield;}
+.cval-input::-webkit-outer-spin-button,.cval-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 .prow{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
 .ptrack{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
 .pfill{height:100%;background:var(--orange);border-radius:2px;transition:width .2s;}
@@ -847,7 +849,7 @@ var CUES={
 var logs={},curDay=0,openP=null,dday=0,activeTab='home';
 var shotMaps={},pbs={},activeZone=null,rpeDay=null;
 
-function wkId(){var d=new Date(),j=new Date(d.getFullYear(),0,1),w=Math.ceil(((d-j)/86400000+j.getDay()+1)/7);return d.getFullYear()+'-W'+w;}
+function wkId(){var d=new Date(),day=d.getDay(),diff=day===0?-6:1-day,mon=new Date(d.getFullYear(),d.getMonth(),d.getDate()+diff);return mon.getFullYear()+'-'+(mon.getMonth()+1)+'-'+mon.getDate();}
 function lk(k){return wkId()+'-'+k;}
 function loadLogs(){try{var r=localStorage.getItem('ps_v9');if(r)logs=JSON.parse(r);}catch(e){logs={};}}
 function saveLogs(){try{localStorage.setItem('ps_v9',JSON.stringify(logs));}catch(e){}}
@@ -1076,13 +1078,13 @@ function renderDrillPage(){
         if(isSh){
           h+='<div class="crow"><span class="clbl">Makes</span><div class="cctl">';
           h+='<button class="cadj" onclick="adj(\''+day.key+'\',\''+src+'\','+bi+','+di+',\'makes\',-1)">&#8722;</button>';
-          h+='<span class="cval" id="vm-'+src+'-'+bi+'-'+di+'">'+m+'</span>';
+          h+='<input type="number" class="cval-input" id="vm-'+src+'-'+bi+'-'+di+'" value="'+m+'" min="0" oninput="setVal(\''+day.key+'\',\''+src+'\','+bi+','+di+',\'makes\',this.value)">';
           h+='<button class="cadj" onclick="adj(\''+day.key+'\',\''+src+'\','+bi+','+di+',\'makes\',1)">+</button>';
           h+='</div></div>';
-          h+='<div class="crow"><span class="clbl">Attempts</span><div class="cctl">';
-          h+='<button class="cadj" onclick="adj(\''+day.key+'\',\''+src+'\','+bi+','+di+',\'attempts\',-1)">&#8722;</button>';
-          h+='<span class="cval" id="va-'+src+'-'+bi+'-'+di+'">'+a+'</span>';
-          h+='<button class="cadj" onclick="adj(\''+day.key+'\',\''+src+'\','+bi+','+di+',\'attempts\',1)">+</button>';
+          h+='<div class="crow"><span class="clbl">Misses</span><div class="cctl">';
+          h+='<button class="cadj" onclick="adjMiss(\''+day.key+'\',\''+src+'\','+bi+','+di+',-1)">&#8722;</button>';
+          h+='<input type="number" class="cval-input" id="vs-'+src+'-'+bi+'-'+di+'" value="'+(a-m)+'" min="0" oninput="setMiss(\''+day.key+'\',\''+src+'\','+bi+','+di+',this.value)">';
+          h+='<button class="cadj" onclick="adjMiss(\''+day.key+'\',\''+src+'\','+bi+','+di+',1)">+</button>';
           h+='</div></div>';
           h+='<div class="prow"><div class="ptrack"><div class="pfill" id="pf-'+src+'-'+bi+'-'+di+'" style="width:'+p2+'%"></div></div>';
           h+='<span class="pnum" id="pn-'+src+'-'+bi+'-'+di+'">'+(a>0?p2+'%':'—')+'</span></div>';
@@ -1125,10 +1127,43 @@ function adj(dk,src,bi,di,field,delta){
   var dl=getDL(dk,src,bi,di);dl[field]=Math.max(0,(dl[field]||0)+delta);
   var m=dl.makes||0,a=dl.attempts||0,p=a>0?Math.round(m/a*100):0;
   var vm=document.getElementById('vm-'+src+'-'+bi+'-'+di);
-  var va=document.getElementById('va-'+src+'-'+bi+'-'+di);
+  var vs=document.getElementById('vs-'+src+'-'+bi+'-'+di);
   var pf=document.getElementById('pf-'+src+'-'+bi+'-'+di);
   var pn=document.getElementById('pn-'+src+'-'+bi+'-'+di);
-  if(vm)vm.textContent=m;if(va)va.textContent=a;
+  if(vm)vm.value=m;if(vs)vs.value=Math.max(0,a-m);
+  if(pf)pf.style.width=p+'%';if(pn)pn.textContent=a>0?p+'%':'—';
+  saveLogs();
+}
+function adjMiss(dk,src,bi,di,delta){
+  var dl=getDL(dk,src,bi,di);
+  dl.attempts=Math.max(dl.makes||0,(dl.attempts||0)+delta);
+  var m=dl.makes||0,a=dl.attempts||0,p=a>0?Math.round(m/a*100):0;
+  var vs=document.getElementById('vs-'+src+'-'+bi+'-'+di);
+  var pf=document.getElementById('pf-'+src+'-'+bi+'-'+di);
+  var pn=document.getElementById('pn-'+src+'-'+bi+'-'+di);
+  if(vs)vs.value=Math.max(0,a-m);
+  if(pf)pf.style.width=p+'%';if(pn)pn.textContent=a>0?p+'%':'—';
+  saveLogs();
+}
+function setVal(dk,src,bi,di,field,val){
+  var dl=getDL(dk,src,bi,di);
+  dl[field]=Math.max(0,parseInt(val)||0);
+  if(field==='makes'&&dl.attempts<dl.makes)dl.attempts=dl.makes;
+  var m=dl.makes||0,a=dl.attempts||0,p=a>0?Math.round(m/a*100):0;
+  var vs=document.getElementById('vs-'+src+'-'+bi+'-'+di);
+  var pf=document.getElementById('pf-'+src+'-'+bi+'-'+di);
+  var pn=document.getElementById('pn-'+src+'-'+bi+'-'+di);
+  if(vs)vs.value=Math.max(0,a-m);
+  if(pf)pf.style.width=p+'%';if(pn)pn.textContent=a>0?p+'%':'—';
+  saveLogs();
+}
+function setMiss(dk,src,bi,di,val){
+  var dl=getDL(dk,src,bi,di);
+  var misses=Math.max(0,parseInt(val)||0);
+  dl.attempts=(dl.makes||0)+misses;
+  var m=dl.makes||0,a=dl.attempts||0,p=a>0?Math.round(m/a*100):0;
+  var pf=document.getElementById('pf-'+src+'-'+bi+'-'+di);
+  var pn=document.getElementById('pn-'+src+'-'+bi+'-'+di);
   if(pf)pf.style.width=p+'%';if(pn)pn.textContent=a>0?p+'%':'—';
   saveLogs();
 }
