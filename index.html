@@ -371,7 +371,7 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
           <div class="tc-focus" id="tc-focus">Loading...</div>
           <div class="tc-sub" id="tc-sub">Tap to start</div>
         </div>
-        <div class="tc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="tc-arrow" id="tc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="dial-card">
         <div class="dial-title">Weekly Progress</div>
@@ -913,7 +913,7 @@ function migrateLogs(){
 }
 function saveLogs(){try{localStorage.setItem('ps_v9',JSON.stringify(logs));}catch(e){}}
 function getLog(k){var key=lk(k);if(!logs[key])logs[key]={date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),dayKey:k,blocks:{},warmup:{}};return logs[key];}
-function getDL(k,src,bi,di){var l=getLog(k);var st=src==='w'?l.warmup:l.blocks;if(!st[bi])st[bi]={};if(!st[bi][di])st[bi][di]={makes:0,attempts:0,done:false,note:''};return st[bi][di];}
+function getDL(k,src,bi,di){var l=getLogC(activeHomeWk(),k);var st=src==='w'?l.warmup:l.blocks;if(!st[bi])st[bi]={};if(!st[bi][di])st[bi][di]={makes:0,attempts:0,done:false,note:''};return st[bi][di];}
 function hasDone(dk){
   var l=logs[lk(dk)];if(!l)return false;
   var day=null;for(var i=0;i<DAYS.length;i++){if(DAYS[i].key===dk){day=DAYS[i];break;}}if(!day)return false;
@@ -924,6 +924,7 @@ function hasDone(dk){
 // ── WEEK-AWARE HELPERS ────────────────────────────────────────────────────────
 function activeHomeWk(){return homeViewWk||wkId();}
 function getLogW(wk,k){return logs[wk+'-'+k]||{dayKey:k,blocks:{},warmup:{}};}
+function getLogC(wk,k){var key=wk+'-'+k;if(!logs[key])logs[key]={date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),dayKey:k,blocks:{},warmup:{}};return logs[key];}
 function hasDoneW(wk,dk){
   var l=logs[wk+'-'+dk];if(!l)return false;
   var day=null;for(var i=0;i<DAYS.length;i++){if(DAYS[i].key===dk){day=DAYS[i];break;}}if(!day)return false;
@@ -1078,8 +1079,8 @@ function refreshHome(){
     document.getElementById('tc-day').textContent='Week Summary';
     document.getElementById('tc-focus').textContent=wt.dn+' drills completed';
     document.getElementById('tc-sub').textContent=wt.mk+' makes'+(wt.pct!==null?' \u00b7 '+wt.pct+'% shooting':'');
-    document.getElementById('today-card').onclick=null;
-    document.getElementById('tc-arrow').style.display='none';
+    document.getElementById('today-card').onclick=function(){goTab('workouts');};
+    document.getElementById('tc-arrow').style.display='flex';
   }else{
     document.getElementById('dpill').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
     wb.style.display='none';
@@ -1151,7 +1152,7 @@ function rdial(){
 function renderWeekDays(){
   var html='';
   DAYS.forEach(function(d,i){
-    var has=hasDone(d.key);
+    var has=hasDoneW(activeHomeWk(),d.key);
     html+='<div class="wd'+(has?' done-day':'')+'" onclick="pickDay('+i+')">';
     html+='<span class="wda">'+d.lb+'</span><span class="wdk">'+d.key+'</span>';
     html+=has?'<div class="wddot"></div>':'<div style="height:8px"></div>';
@@ -1163,7 +1164,7 @@ function renderWorkoutsList(){
   var el=document.getElementById('scroll-workouts');
   var html='';
   DAYS.forEach(function(d,i){
-    var st=cstats(d.key);
+    var st=cstatsW(activeHomeWk(),d.key);
     var pct=st.tot>0?Math.round(st.dn/st.tot*100):0;
     html+='<div style="background:#141414;border:1px solid #1e1e1e;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;" onclick="pickDay('+i+')">';
     html+='<div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px;">'+d.full+'</div>';
@@ -1185,7 +1186,7 @@ function renderWorkoutsList(){
 
 // ── DRILL PAGE ────────────────────────────────────────────────────────────
 function renderDrillPage(){
-  var day=DAYS[curDay],st=cstats(day.key);
+  var day=DAYS[curDay],st=cstatsW(activeHomeWk(),day.key);
   document.getElementById('ds-done').textContent=st.dn;
   document.getElementById('ds-tot').textContent=st.tot;
   document.getElementById('ds-mk').textContent=st.mk;
@@ -1194,7 +1195,7 @@ function renderDrillPage(){
   function mkb(src,blocks,label){
     h+='<div class="sec-label">'+label+'</div>';
     blocks.forEach(function(b,bi){
-      var l=getLog(day.key),store=src==='w'?l.warmup:l.blocks;
+      var l=getLogW(activeHomeWk(),day.key),store=src==='w'?l.warmup:l.blocks;
       var dn=0;
       b.drills.forEach(function(_,di){if((store[bi]||{})[di]&&(store[bi]||{})[di].done===true)dn++;});
       var pct=Math.round(dn/b.drills.length*100);
@@ -1612,7 +1613,7 @@ function checkPB(dk,src,bi,di){
 // ── RPE ───────────────────────────────────────────────────────────────────
 function showRPEModal(){
   var day=DAYS[curDay];rpeDay=day.key;
-  var l=logs[lk(day.key)];var curRPE=l?l.rpe:null;
+  var l=logs[activeHomeWk()+'-'+day.key];var curRPE=l?l.rpe:null;
   var h='';
   for(var i=1;i<=10;i++){
     var bg=i<=3?'#0d2e16':i<=6?'#2a2200':'#2a0808';
@@ -1624,7 +1625,7 @@ function showRPEModal(){
 }
 function saveRPE(val){
   if(!rpeDay)return;
-  var l=getLog(rpeDay);l.rpe=val;saveLogs();
+  var l=getLogC(activeHomeWk(),rpeDay);l.rpe=val;saveLogs();
   var btn=document.getElementById('rpe-btn');
   if(btn){btn.textContent='RPE: '+val;btn.classList.add('logged');}
   closeRPE();
@@ -1632,7 +1633,7 @@ function saveRPE(val){
 function closeRPE(){document.getElementById('ov-rpe').classList.remove('on');}
 function updateRPEBtn(){
   var btn=document.getElementById('rpe-btn');if(!btn)return;
-  var day=DAYS[curDay];var l=logs[lk(day.key)];
+  var day=DAYS[curDay];var l=logs[activeHomeWk()+'-'+day.key];
   if(l&&l.rpe){btn.textContent='RPE: '+l.rpe;btn.classList.add('logged');}
   else{btn.textContent='Log RPE';btn.classList.remove('logged');}
 }
