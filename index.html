@@ -336,6 +336,70 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
 .goal-target-inp{width:70px;background:var(--bg3);border:1px solid var(--bg4);color:var(--text);border-radius:8px;padding:8px;font-size:12px;font-family:inherit;outline:none;text-align:center;}
 .goal-lbl-inp{width:100%;background:var(--bg3);border:1px solid var(--bg4);color:var(--text);border-radius:8px;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;margin-bottom:10px;display:block;}
 .goal-lbl-inp::placeholder{color:var(--text3);}
+
+/* ── MY PLAYER ── */
+.myp-scroll{padding:0 16px 24px;}
+.myp-card{background:linear-gradient(135deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--bg3);border-radius:20px;padding:20px;margin-bottom:12px;position:relative;overflow:hidden;}
+.myp-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(232,105,42,0.06);pointer-events:none;}
+.myp-top{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.myp-ovr{width:68px;height:68px;border-radius:16px;background:var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 16px rgba(232,105,42,0.4);}
+.myp-ovr-num{font-size:28px;font-weight:800;color:#fff;line-height:1;}
+.myp-ovr-lbl{font-size:7px;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:.8px;}
+.myp-info{flex:1;min-width:0;}
+.myp-name{font-size:18px;font-weight:700;letter-spacing:-0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.myp-build-tag{display:inline-flex;align-items:center;background:rgba(232,105,42,0.15);border:1px solid rgba(232,105,42,0.3);border-radius:8px;padding:3px 8px;font-size:9px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.6px;margin-top:4px;}
+.myp-pos{font-size:11px;color:var(--text2);margin-top:3px;}
+.myp-attrs{display:flex;flex-direction:column;gap:10px;}
+.myp-attr-row{display:flex;flex-direction:column;gap:4px;}
+.myp-attr-top{display:flex;justify-content:space-between;align-items:baseline;}
+.myp-attr-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;}
+.myp-attr-vals{font-size:11px;color:var(--text2);}
+.myp-attr-val-hi{font-weight:700;font-size:13px;}
+.myp-bar-track{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.myp-bar-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.myp-actions{display:flex;gap:8px;margin-top:14px;}
+.myp-upgrade-btn{flex:1;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;}
+.myp-upgrade-btn:active{opacity:.85;}
+.myp-pts-badge{background:rgba(0,0,0,0.25);border-radius:8px;padding:2px 7px;font-size:11px;font-weight:700;}
+.myp-change-btn{padding:13px 16px;background:var(--bg3);color:var(--text2);border:1px solid var(--bg4);border-radius:13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.myp-change-btn:active{background:var(--bg4);}
+.myp-info-section{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:16px 0 8px;}
+/* Build Select Overlay */
+#ov-build{z-index:300;background:var(--bg);overflow-y:auto;display:none;flex-direction:column;position:absolute;inset:0;}
+#ov-build.on{display:flex;}
+.build-header{padding:32px 20px 16px;flex-shrink:0;}
+.build-title{font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+.build-sub{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5;}
+.build-list{padding:0 16px 16px;flex:1;}
+.build-card{background:var(--bg2);border:2px solid var(--bg3);border-radius:18px;padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s;}
+.build-card:active,.build-card.sel{border-color:var(--orange);}
+.build-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.build-card-name{font-size:15px;font-weight:700;}
+.build-card-ovr{font-size:13px;font-weight:700;color:var(--orange);}
+.build-card-desc{font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5;}
+.build-bars{display:flex;flex-direction:column;gap:5px;}
+.build-bar-row{display:flex;align-items:center;gap:8px;}
+.build-bar-lbl{font-size:9px;color:var(--text2);width:60px;text-transform:uppercase;letter-spacing:.4px;}
+.build-bar-track{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+.build-bar-fill{height:100%;border-radius:2px;}
+.build-bar-val{font-size:9px;color:var(--text2);width:30px;text-align:right;}
+.build-select-footer{padding:12px 16px 36px;flex-shrink:0;background:var(--bg);border-top:1px solid var(--bg2);}
+.build-select-btn{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+.build-select-btn:disabled{opacity:.35;cursor:default;}
+.build-select-btn:not(:disabled):active{opacity:.85;}
+/* Upgrade Overlay */
+.upg-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--bg3);}
+.upg-row:last-child{border-bottom:none;}
+.upg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.upg-label{font-size:12px;font-weight:600;width:100px;}
+.upg-val{font-size:14px;font-weight:700;width:26px;}
+.upg-arrow{font-size:10px;color:var(--text3);}
+.upg-next{font-size:14px;font-weight:700;width:26px;color:var(--orange);}
+.upg-cost{font-size:10px;color:var(--text2);flex:1;text-align:right;}
+.upg-btn{width:32px;height:32px;border-radius:50%;background:var(--orange);border:none;color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;}
+.upg-btn:disabled{background:var(--bg3);color:var(--text3);cursor:default;}
+.upg-btn:not(:disabled):active{opacity:.8;}
+.upg-pts-info{font-size:12px;color:var(--text2);text-align:center;padding:8px 0 4px;}
 </style>
 </head>
 <body>
@@ -449,36 +513,35 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
   </div>
 </div>
 
-<!-- PROFILE -->
+<!-- PROFILE / MY PLAYER -->
 <div class="pg" id="pg-profile">
   <div class="scroll" id="scroll-profile">
-    <div class="prof-header">
-      <div class="prof-avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div class="prof-name" id="prof-name-display">Your Name</div>
-      <div class="prof-pos" id="prof-pos-display">Position • Age</div>
+    <div id="myp-content"></div>
+  </div>
+</div>
+
+<!-- BUILD SELECT OVERLAY -->
+<div id="ov-build">
+  <div class="build-header">
+    <div class="build-title">Choose Your Build</div>
+    <div class="build-sub">Your starting point shapes your ceiling. Each build has unique starting attributes and max caps.</div>
+  </div>
+  <div class="build-list" id="build-list"></div>
+  <div class="build-select-footer">
+    <button class="build-select-btn" id="build-select-btn" disabled onclick="confirmBuildSelect()">Select Build</button>
+  </div>
+</div>
+
+<!-- UPGRADE OVERLAY -->
+<div class="ov" id="ov-upgrade">
+  <div class="osheet">
+    <div class="ohandle"></div>
+    <div class="ohdr">
+      <div class="otitle">Upgrade Attributes</div>
+      <button class="xbtn" onclick="closeUpgradeOv()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="prof-fields">
-      <div class="field-section">Personal</div>
-      <div class="field-row">
-        <span class="field-label">Name</span>
-        <input class="field-val" id="pf-name" placeholder="Your name" oninput="saveProfile()"/>
-      </div>
-      <div class="field-row">
-        <span class="field-label">Age</span>
-        <input class="field-val" id="pf-age" placeholder="e.g. 22" type="number" oninput="saveProfile()"/>
-      </div>
-      <div class="field-row">
-        <span class="field-label">Position</span>
-        <input class="field-val" id="pf-pos" placeholder="e.g. Point Guard" oninput="saveProfile()"/>
-      </div>
-      <div class="field-section">Smart Goals</div>
-      <div id="goals-editor"></div>
-      <div id="goals-display"></div>
-    </div>
-    <button class="export-btn" onclick="exportData()">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Export all workout data
-    </button>
+    <div id="upg-pts-info" class="upg-pts-info"></div>
+    <div id="upg-rows"></div>
   </div>
 </div>
 
@@ -1028,7 +1091,7 @@ function goTab(tab){
   } else if(tab==='profile'){
     document.getElementById('pg-profile').classList.add('on');
     document.getElementById('tab-profile').classList.add('on');
-    loadProfile();
+    renderMyPlayer();
   }
 }
 
@@ -1321,6 +1384,10 @@ function mdrll(dk,src,bi,di,done){
   if(done){
     var drill=src==='w'?(WB[bi]&&WB[bi].drills[di]):(DAYS[curDay].blocks[bi]&&DAYS[curDay].blocks[bi].drills[di]);
     if(drill&&drill.s==='shooting'){checkPB(dk,src,bi,di);}
+    awardAttrPoints(getBlockCat(src,bi),0.5);
+    checkBlockComplete(src,bi);
+  } else {
+    awardAttrPoints(getBlockCat(src,bi),-0.5);
   }
   saveLogs();
   var panel=document.getElementById('dp-'+src+'-'+bi+'-'+di);
@@ -1437,12 +1504,11 @@ function saveProfile(){
   updateProfileDisplay(p);
 }
 function updateProfileDisplay(p){
-  document.getElementById('prof-name-display').textContent=p.name||'Your Name';
-  var sub='';
-  if(p.pos)sub+=p.pos;
-  if(p.age)sub+=(sub?' • ':'')+p.age+' yrs';
-  document.getElementById('prof-pos-display').textContent=sub||'Position \u2022 Age';
-  renderSmartGoals();
+  // Update player card name/pos in-place without full re-render
+  var nameEl=document.querySelector('.myp-name');
+  if(nameEl)nameEl.textContent=p.name||'Your Name';
+  var posEl=document.querySelector('.myp-pos');
+  if(posEl)posEl.textContent=p.pos||'';
 }
 
 // ── HISTORY ───────────────────────────────────────────────────────────────
@@ -1809,6 +1875,238 @@ function saveGoal(idx,field,val){
   renderSmartGoals();
 }
 
+// ── MY PLAYER ────────────────────────────────────────────────────────────
+var BUILDS={
+  SHS:{name:'Sharp Shooter',desc:'Maximum shooting ceiling. Built to be a pure scorer. Handles and athleticism cap lower to balance the elite shot.',
+    attrs:{shooting:72,handles:55,athleticism:60,fundamentals:65},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  SLA:{name:'Slasher',desc:'Explosive athlete built to attack the rim. Elite finishing and burst. Three-ball is a work in progress.',
+    attrs:{shooting:52,handles:70,athleticism:78,fundamentals:65},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  PLY:{name:'Playmaker',desc:'The floor general. Handles and court vision at elite levels. Can score at all three levels but thrives creating for others.',
+    attrs:{shooting:60,handles:75,athleticism:65,fundamentals:72},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  TWY:{name:'Two-Way',desc:'The complete package. Balanced across every attribute with no major weaknesses. Can guard any position.',
+    attrs:{shooting:65,handles:65,athleticism:68,fundamentals:68},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  GLC:{name:'Glass Cleaner',desc:'Relentless rebounder and rim presence. Unmatched strength and athleticism in traffic. Shooting is a secondary focus.',
+    attrs:{shooting:45,handles:50,athleticism:82,fundamentals:72},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  LKD:{name:'Lockdown',desc:'Elite perimeter defender with the fundamentals to contain any guard. High defensive IQ and lateral quickness. Offense is functional.',
+    attrs:{shooting:58,handles:60,athleticism:72,fundamentals:78},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}},
+  SFT:{name:'Shifty Playmaker',desc:'The highest skill ceiling in the game. Maxed handles, elite shooting & IQ. Built for speed and creativity — vertical and raw strength are the tradeoff.',
+    attrs:{shooting:70,handles:82,athleticism:65,fundamentals:75},
+    caps:{shooting:99,handles:99,athleticism:99,fundamentals:99}}
+};
+var ATTR_KEYS=['shooting','handles','athleticism','fundamentals'];
+var ATTR_LABELS={shooting:'Shooting',handles:'Handles',athleticism:'Athleticism',fundamentals:'Fundamentals'};
+var ATTR_COLORS={shooting:'var(--s)',handles:'var(--h)',athleticism:'var(--str)',fundamentals:'var(--m)'};
+var CAT_TO_ATTR={s:'shooting',h:'handles',str:'athleticism',m:'fundamentals'};
+var _pendingBuild=null;
+
+function loadMyPlayer(){try{var r=localStorage.getItem('ps_myplayer');return r?JSON.parse(r):null;}catch(e){return null;}}
+function saveMyPlayer(mp){try{localStorage.setItem('ps_myplayer',JSON.stringify(mp));}catch(e){}}
+function getOVR(mp){var sum=0;ATTR_KEYS.forEach(function(k){sum+=mp.attrs[k]||0;});return Math.round(sum/ATTR_KEYS.length);}
+function upgradeCost(val){if(val>=90)return 5;if(val>=80)return 3;if(val>=70)return 2;return 1;}
+function totalSpendable(mp){var t=0;ATTR_KEYS.forEach(function(k){t+=Math.floor(mp.points[k]||0);});return t;}
+function getBlockCat(src,bi){
+  if(src==='w')return WB[bi]?WB[bi].cat||'m':'m';
+  return DAYS[curDay].blocks[bi]?DAYS[curDay].blocks[bi].cat||'m':'m';
+}
+function awardAttrPoints(cat,delta){
+  var mp=loadMyPlayer();if(!mp||!mp.build)return;
+  var key=CAT_TO_ATTR[cat];if(!key)return;
+  mp.points[key]=Math.max(0,(mp.points[key]||0)+delta);
+  saveMyPlayer(mp);
+}
+function checkBlockComplete(src,bi){
+  var mp=loadMyPlayer();if(!mp||!mp.build)return;
+  var day=DAYS[curDay];
+  var blocks=src==='w'?WB:day.blocks;
+  var block=blocks[bi];if(!block||!block.drills.length)return;
+  var l=getLogW(activeHomeWk(),day.key);
+  var store=src==='w'?l.warmup:l.blocks;
+  var allDone=block.drills.every(function(_,di){return (store[bi]||{})[di]&&(store[bi]||{})[di].done===true;});
+  if(!allDone)return;
+  if(!mp.blockBonuses)mp.blockBonuses={};
+  var sessionKey=lk(day.key);
+  if(!mp.blockBonuses[sessionKey])mp.blockBonuses[sessionKey]={};
+  var bonusKey=src+'-'+bi;
+  if(mp.blockBonuses[sessionKey][bonusKey])return;
+  mp.blockBonuses[sessionKey][bonusKey]=true;
+  var key=CAT_TO_ATTR[getBlockCat(src,bi)];
+  if(key)mp.points[key]=(mp.points[key]||0)+1;
+  saveMyPlayer(mp);
+}
+function upgradeAttr(attrKey){
+  var mp=loadMyPlayer();if(!mp||!mp.build)return;
+  var cur=mp.attrs[attrKey]||0;
+  var cap=BUILDS[mp.build].caps[attrKey]||99;
+  if(cur>=cap)return;
+  var cost=upgradeCost(cur);
+  if(Math.floor(mp.points[attrKey]||0)<cost)return;
+  mp.attrs[attrKey]=cur+1;
+  mp.points[attrKey]=(mp.points[attrKey]||0)-cost;
+  mp.totalUpgrades=(mp.totalUpgrades||0)+1;
+  saveMyPlayer(mp);
+  renderUpgradeOv();
+  // update OVR badge in card without full re-render
+  var ovrEl=document.querySelector('.myp-ovr-num');
+  if(ovrEl)ovrEl.textContent=getOVR(mp);
+  var attrRow=document.querySelector('.myp-attr-row[data-attr="'+attrKey+'"]');
+  if(attrRow){
+    var build=BUILDS[mp.build];
+    var val=mp.attrs[attrKey];var cap2=build.caps[attrKey];var pct=Math.round(val/cap2*100);
+    var avail=Math.floor(mp.points[attrKey]||0);
+    var col=ATTR_COLORS[attrKey];
+    var topEl=attrRow.querySelector('.myp-attr-vals');
+    if(topEl)topEl.innerHTML='<span class="myp-attr-val-hi" style="color:'+col+'">'+val+'</span> <span style="color:var(--text3)">/ '+cap2+'</span>'+(avail>0?' <span style="color:var(--orange);font-size:9px;font-weight:700;">+'+avail+' pts</span>':'');
+    var fillEl=attrRow.querySelector('.myp-bar-fill');
+    if(fillEl)fillEl.style.width=pct+'%';
+  }
+  // refresh upgrade button pts badge
+  var ptsEl=document.querySelector('.myp-pts-badge');
+  if(ptsEl)ptsEl.textContent=totalSpendable(mp)+' pts';
+}
+function retroactiveAwardPoints(mp){
+  var catMap={s:'shooting',h:'handles',str:'athleticism',m:'fundamentals'};
+  Object.keys(logs).forEach(function(logKey){
+    var entry=logs[logKey];if(!entry)return;
+    var dk=entry.dayKey;
+    var dayObj=null;DAYS.forEach(function(d){if(d.key===dk)dayObj=d;});
+    WB.forEach(function(block,bi){
+      var store=entry.warmup||{};var allDone=true;
+      block.drills.forEach(function(_,di){
+        if((store[bi]||{})[di]&&(store[bi]||{})[di].done===true){
+          var k=catMap[block.cat||'m']||'fundamentals';mp.points[k]=(mp.points[k]||0)+0.5;
+        }else{allDone=false;}
+      });
+      if(allDone&&block.drills.length>0){var k=catMap[block.cat||'m']||'fundamentals';mp.points[k]=(mp.points[k]||0)+1;}
+    });
+    if(dayObj){dayObj.blocks.forEach(function(block,bi){
+      var store=entry.blocks||{};var allDone=true;
+      block.drills.forEach(function(_,di){
+        if((store[bi]||{})[di]&&(store[bi]||{})[di].done===true){
+          var k=catMap[block.cat||'m']||'fundamentals';mp.points[k]=(mp.points[k]||0)+0.5;
+        }else{allDone=false;}
+      });
+      if(allDone&&block.drills.length>0){var k=catMap[block.cat||'m']||'fundamentals';mp.points[k]=(mp.points[k]||0)+1;}
+    });}
+  });
+  mp.retroactiveDone=true;
+  return mp;
+}
+function renderMyPlayer(){
+  var mp=loadMyPlayer();
+  var el=document.getElementById('myp-content');
+  if(!el)return;
+  if(!mp||!mp.build){
+    el.innerHTML='<div style="padding:60px 20px;text-align:center;"><div style="font-size:17px;font-weight:700;margin-bottom:8px;">Start Your Career</div><div style="font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6;">Choose a build to begin your MyPlayer journey. Complete drills to earn attribute points and upgrade your player.</div><button onclick="showBuildSelect()" style="padding:14px 32px;background:var(--orange);color:#fff;border:none;border-radius:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Create Player</button></div>';
+    return;
+  }
+  var build=BUILDS[mp.build];
+  var ovr=getOVR(mp);
+  var pts=totalSpendable(mp);
+  var prof;try{prof=JSON.parse(localStorage.getItem('ps_profile')||'{}');}catch(e){prof={};}
+  var name=prof.name||'Your Name';var pos=prof.pos||'';
+  var h='<div class="myp-scroll">';
+  h+='<div class="myp-card">';
+  h+='<div class="myp-top">';
+  h+='<div class="myp-ovr"><div class="myp-ovr-num">'+ovr+'</div><div class="myp-ovr-lbl">OVR</div></div>';
+  h+='<div class="myp-info"><div class="myp-name">'+name+'</div><div class="myp-build-tag">'+build.name+'</div>'+(pos?'<div class="myp-pos">'+pos+'</div>':'')+'</div>';
+  h+='</div>';
+  h+='<div class="myp-attrs">';
+  ATTR_KEYS.forEach(function(k){
+    var val=mp.attrs[k]||0;var cap=build.caps[k]||99;var pct=Math.round(val/cap*100);
+    var col=ATTR_COLORS[k];var avail=Math.floor(mp.points[k]||0);
+    h+='<div class="myp-attr-row" data-attr="'+k+'">';
+    h+='<div class="myp-attr-top"><span class="myp-attr-label" style="color:'+col+'">'+ATTR_LABELS[k]+'</span>';
+    h+='<span class="myp-attr-vals"><span class="myp-attr-val-hi" style="color:'+col+'">'+val+'</span> <span style="color:var(--text3)">/ '+cap+'</span>'+(avail>0?' <span style="color:var(--orange);font-size:9px;font-weight:700;">+'+avail+' pts</span>':'')+'</span></div>';
+    h+='<div class="myp-bar-track"><div class="myp-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<div class="myp-actions">';
+  h+='<button class="myp-upgrade-btn" onclick="openUpgradeOv()">Upgrade <span class="myp-pts-badge">'+pts+' pts</span></button>';
+  h+='<button class="myp-change-btn" onclick="showBuildSelect()">Change Build</button>';
+  h+='</div></div>';
+  h+='<div class="myp-info-section">Player Info</div>';
+  h+='<div class="field-row"><span class="field-label">Name</span><input class="field-val" id="pf-name" placeholder="Your name" value="'+(prof.name||'')+'" oninput="saveProfile()"/></div>';
+  h+='<div class="field-row"><span class="field-label">Position</span><input class="field-val" id="pf-pos" placeholder="e.g. Point Guard" value="'+(prof.pos||'')+'" oninput="saveProfile()"/></div>';
+  h+='<div class="field-row" style="margin-bottom:16px;"><span class="field-label">Age</span><input class="field-val" id="pf-age" placeholder="e.g. 22" type="number" value="'+(prof.age||'')+'" oninput="saveProfile()"/></div>';
+  h+='<button class="export-btn" onclick="exportData()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export workout data</button>';
+  h+='</div>';
+  el.innerHTML=h;
+}
+function showBuildSelect(){
+  _pendingBuild=null;
+  var el=document.getElementById('build-list');
+  var btn=document.getElementById('build-select-btn');
+  if(btn)btn.disabled=true;
+  var h='';
+  Object.keys(BUILDS).forEach(function(code){
+    var b=BUILDS[code];var tmpMp={attrs:b.attrs,build:code};var ovr=getOVR(tmpMp);
+    h+='<div class="build-card" id="bc-'+code+'" onclick="pickBuild(\''+code+'\')">';
+    h+='<div class="build-card-top"><span class="build-card-name">'+b.name+'</span><span class="build-card-ovr">'+ovr+' OVR</span></div>';
+    h+='<div class="build-card-desc">'+b.desc+'</div>';
+    h+='<div class="build-bars">';
+    ATTR_KEYS.forEach(function(k){
+      var val=b.attrs[k];var cap=b.caps[k];var pct=Math.round(val/cap*100);
+      h+='<div class="build-bar-row"><span class="build-bar-lbl">'+ATTR_LABELS[k].substring(0,8)+'</span>';
+      h+='<div class="build-bar-track"><div class="build-bar-fill" style="width:'+pct+'%;background:'+ATTR_COLORS[k]+'"></div></div>';
+      h+='<span class="build-bar-val">'+val+'/'+cap+'</span></div>';
+    });
+    h+='</div></div>';
+  });
+  if(el)el.innerHTML=h;
+  document.getElementById('ov-build').classList.add('on');
+}
+function pickBuild(code){
+  _pendingBuild=code;
+  document.querySelectorAll('.build-card').forEach(function(c){c.classList.remove('sel');});
+  var card=document.getElementById('bc-'+code);if(card)card.classList.add('sel');
+  var btn=document.getElementById('build-select-btn');if(btn)btn.disabled=false;
+}
+function confirmBuildSelect(){
+  if(!_pendingBuild)return;
+  var existing=loadMyPlayer();
+  var build=BUILDS[_pendingBuild];
+  var mp={build:_pendingBuild,attrs:Object.assign({},build.attrs),points:{shooting:0,handles:0,athleticism:0,fundamentals:0},totalUpgrades:0,retroactiveDone:false,blockBonuses:{}};
+  if(!existing||!existing.retroactiveDone){mp=retroactiveAwardPoints(mp);}
+  else{mp.retroactiveDone=true;}
+  saveMyPlayer(mp);
+  document.getElementById('ov-build').classList.remove('on');
+  _pendingBuild=null;
+  renderMyPlayer();
+}
+function openUpgradeOv(){renderUpgradeOv();document.getElementById('ov-upgrade').classList.add('on');}
+function closeUpgradeOv(){document.getElementById('ov-upgrade').classList.remove('on');}
+function renderUpgradeOv(){
+  var mp=loadMyPlayer();if(!mp||!mp.build)return;
+  var build=BUILDS[mp.build];
+  var pts=totalSpendable(mp);
+  var ptsEl=document.getElementById('upg-pts-info');
+  if(ptsEl)ptsEl.innerHTML='Available to spend: <strong>'+pts+'</strong> pts total';
+  var h='';
+  ATTR_KEYS.forEach(function(k){
+    var val=mp.attrs[k]||0;var cap=build.caps[k]||99;var cost=upgradeCost(val);
+    var avail=Math.floor(mp.points[k]||0);var atCap=val>=cap;var canUpg=!atCap&&avail>=cost;
+    var col=ATTR_COLORS[k];
+    h+='<div class="upg-row">';
+    h+='<div class="upg-dot" style="background:'+col+'"></div>';
+    h+='<span class="upg-label">'+ATTR_LABELS[k]+'</span>';
+    h+='<span class="upg-val" style="color:'+col+'">'+val+'</span>';
+    h+='<span class="upg-arrow">&#8594;</span>';
+    h+='<span class="upg-next">'+(atCap?'MAX':val+1)+'</span>';
+    h+='<span class="upg-cost">'+(atCap?'at cap':avail+' / '+cost+' pts')+'</span>';
+    h+='<button class="upg-btn" onclick="upgradeAttr(\''+k+'\')"'+(canUpg?'':' disabled')+'>+</button>';
+    h+='</div>';
+  });
+  var rowEl=document.getElementById('upg-rows');if(rowEl)rowEl.innerHTML=h;
+}
+function initMyPlayer(){var mp=loadMyPlayer();if(!mp||!mp.build){showBuildSelect();}}
+
 // ── INIT ──────────────────────────────────────────────────────────────────
 function init(){
   loadLogs();loadShotMaps();loadPBs();
@@ -1821,6 +2119,7 @@ function init(){
   setupScrollHide('scroll-analytics');
   setupScrollHide('scroll-shotmap');
   setupScrollHide('scroll-profile');
+  initMyPlayer();
 }
 init();
 </script>
