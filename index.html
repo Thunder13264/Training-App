@@ -579,16 +579,16 @@ html,body{height:100%;overflow:hidden;background:#0a0a0a;}
       <div class="otitle" id="zone-title">Zone</div>
       <button class="xbtn" onclick="closeZone()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="zone-sheet-name" id="zone-sub">Tap +/&#8722; to log makes and attempts</div>
+    <div class="zone-sheet-name" id="zone-sub">This week &mdash; court shows all time</div>
     <div class="crow"><span class="clbl">Makes</span><div class="cctl">
-      <button class="cadj" onclick="adjZone('makes',-1)">&#8722;</button>
-      <span class="cval" id="zone-makes">0</span>
-      <button class="cadj" onclick="adjZone('makes',1)">+</button>
+      <button class="cadj" onclick="adjZoneMakes(-1)">&#8722;</button>
+      <input type="number" class="cval-input" id="zone-makes" value="0" min="0" oninput="setZoneMakes(this.value)">
+      <button class="cadj" onclick="adjZoneMakes(1)">+</button>
     </div></div>
-    <div class="crow"><span class="clbl">Attempts</span><div class="cctl">
-      <button class="cadj" onclick="adjZone('attempts',-1)">&#8722;</button>
-      <span class="cval" id="zone-attempts">0</span>
-      <button class="cadj" onclick="adjZone('attempts',1)">+</button>
+    <div class="crow"><span class="clbl">Misses</span><div class="cctl">
+      <button class="cadj" onclick="adjZoneMisses(-1)">&#8722;</button>
+      <input type="number" class="cval-input" id="zone-misses" value="0" min="0" oninput="setZoneMisses(this.value)">
+      <button class="cadj" onclick="adjZoneMisses(1)">+</button>
     </div></div>
     <div class="prow"><div class="ptrack"><div class="pfill" id="zone-pfill" style="width:0%"></div></div>
     <span class="pnum" id="zone-pnum">—</span></div>
@@ -1562,25 +1562,23 @@ function renderShotMap(){
 }
 function openZone(zone){
   activeZone=zone;
-  var d=getAllTimeZoneData(zone);
+  var d=getZoneData(zone);
   document.getElementById('zone-title').textContent=ZONE_NAMES[zone]||zone;
-  document.getElementById('zone-makes').textContent=d.makes;
-  document.getElementById('zone-attempts').textContent=d.attempts;
-  var p=d.attempts>0?Math.round(d.makes/d.attempts*100):0;
+  document.getElementById('zone-makes').value=d.makes||0;
+  document.getElementById('zone-misses').value=Math.max(0,(d.attempts||0)-(d.makes||0));
+  var at=getAllTimeZoneData(zone);
+  var p=at.attempts>0?Math.round(at.makes/at.attempts*100):0;
   document.getElementById('zone-pfill').style.width=p+'%';
-  document.getElementById('zone-pnum').textContent=d.attempts>0?p+'%':'—';
+  document.getElementById('zone-pnum').textContent=at.attempts>0?p+'%':'—';
   var ovz=document.getElementById('ov-zone');ovz.getBoundingClientRect();ovz.classList.add('on');
 }
 function closeZone(){document.getElementById('ov-zone').classList.remove('on');activeZone=null;}
-function adjZone(field,delta){
-  if(!activeZone)return;
+function refreshZoneOverlay(){
   var d=getZoneData(activeZone);
-  d[field]=Math.max(0,(d[field]||0)+delta);
-  saveShotMaps();
+  document.getElementById('zone-makes').value=d.makes||0;
+  document.getElementById('zone-misses').value=Math.max(0,(d.attempts||0)-(d.makes||0));
   var at=getAllTimeZoneData(activeZone);
   var p=at.attempts>0?Math.round(at.makes/at.attempts*100):0;
-  document.getElementById('zone-makes').textContent=at.makes;
-  document.getElementById('zone-attempts').textContent=at.attempts;
   document.getElementById('zone-pfill').style.width=p+'%';
   document.getElementById('zone-pnum').textContent=at.attempts>0?p+'%':'—';
   var el=document.getElementById('zone-'+activeZone);
@@ -1599,6 +1597,61 @@ function adjZone(field,delta){
     '<div class="smbox"><div class="smval">'+tmk+'</div><div class="smlbl">Total Makes</div></div>'+
     '<div class="smbox"><div class="smval">'+tat+'</div><div class="smlbl">Attempts</div></div>'+
     '<div class="smbox"><div class="smval">'+(op!==null?op+'%':'—')+'</div><div class="smlbl">Overall %</div></div>';
+}
+function adjZoneMakes(delta){
+  if(!activeZone)return;
+  var d=getZoneData(activeZone);
+  d.makes=Math.max(0,(d.makes||0)+delta);
+  if(d.attempts<d.makes)d.attempts=d.makes;
+  saveShotMaps();refreshZoneOverlay();
+}
+function adjZoneMisses(delta){
+  if(!activeZone)return;
+  var d=getZoneData(activeZone);
+  var misses=Math.max(0,(d.attempts||0)-(d.makes||0));
+  misses=Math.max(0,misses+delta);
+  d.attempts=(d.makes||0)+misses;
+  saveShotMaps();refreshZoneOverlay();
+}
+function setZoneMakes(val){
+  if(!activeZone)return;
+  var d=getZoneData(activeZone);
+  d.makes=Math.max(0,parseInt(val)||0);
+  if(d.attempts<d.makes)d.attempts=d.makes;
+  saveShotMaps();
+  var at=getAllTimeZoneData(activeZone);
+  var p=at.attempts>0?Math.round(at.makes/at.attempts*100):0;
+  document.getElementById('zone-pfill').style.width=p+'%';
+  document.getElementById('zone-pnum').textContent=at.attempts>0?p+'%':'—';
+  var misses=Math.max(0,(d.attempts||0)-(d.makes||0));
+  document.getElementById('zone-misses').value=misses;
+  var el=document.getElementById('zone-'+activeZone);
+  if(el)el.setAttribute('fill',zoneHeat(at.makes,at.attempts));
+  var st=document.getElementById('zs-'+activeZone);
+  if(st){st.textContent=at.attempts>0?p+'%':'';if(!at.attempts)st.setAttribute('fill','transparent');else if(at.makes/at.attempts<0.4)st.setAttribute('fill','#6ab0df');else st.setAttribute('fill','#f07040');}
+  var allsm=getAllTimeShotMap();var tmk=0,tat=0;
+  Object.keys(allsm).forEach(function(z){tmk+=allsm[z].makes||0;tat+=allsm[z].attempts||0;});
+  var op=tat>0?Math.round(tmk/tat*100):null;
+  document.getElementById('sm-totals').innerHTML='<div class="smbox"><div class="smval">'+tmk+'</div><div class="smlbl">Total Makes</div></div><div class="smbox"><div class="smval">'+tat+'</div><div class="smlbl">Attempts</div></div><div class="smbox"><div class="smval">'+(op!==null?op+'%':'—')+'</div><div class="smlbl">Overall %</div></div>';
+}
+function setZoneMisses(val){
+  if(!activeZone)return;
+  var d=getZoneData(activeZone);
+  var misses=Math.max(0,parseInt(val)||0);
+  d.attempts=(d.makes||0)+misses;
+  saveShotMaps();
+  var at=getAllTimeZoneData(activeZone);
+  var p=at.attempts>0?Math.round(at.makes/at.attempts*100):0;
+  document.getElementById('zone-pfill').style.width=p+'%';
+  document.getElementById('zone-pnum').textContent=at.attempts>0?p+'%':'—';
+  var el=document.getElementById('zone-'+activeZone);
+  if(el)el.setAttribute('fill',zoneHeat(at.makes,at.attempts));
+  var st=document.getElementById('zs-'+activeZone);
+  if(st){st.textContent=at.attempts>0?p+'%':'';if(!at.attempts)st.setAttribute('fill','transparent');else if(at.makes/at.attempts<0.4)st.setAttribute('fill','#6ab0df');else st.setAttribute('fill','#f07040');}
+  var allsm=getAllTimeShotMap();var tmk=0,tat=0;
+  Object.keys(allsm).forEach(function(z){tmk+=allsm[z].makes||0;tat+=allsm[z].attempts||0;});
+  var op=tat>0?Math.round(tmk/tat*100):null;
+  document.getElementById('sm-totals').innerHTML='<div class="smbox"><div class="smval">'+tmk+'</div><div class="smlbl">Total Makes</div></div><div class="smbox"><div class="smval">'+tat+'</div><div class="smlbl">Attempts</div></div><div class="smbox"><div class="smval">'+(op!==null?op+'%':'—')+'</div><div class="smlbl">Overall %</div></div>';
 }
 
 // ── PERSONAL BESTS ────────────────────────────────────────────────────────
